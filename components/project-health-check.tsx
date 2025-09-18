@@ -16,7 +16,6 @@ import {
   Settings,
   Download,
   Brain,
-  RotateCcw,
 } from "lucide-react"
 
 // Sample project scenarios for demonstration
@@ -214,12 +213,6 @@ export function ProjectHealthCheck() {
     setAnalysisStep("")
   }
 
-  const resetAnalysis = () => {
-    setIsAnalyzing(false)
-    setAnalysisComplete(false)
-    setAnalysisStep("")
-  }
-
   const getHealthColor = (score: number) => {
     if (score >= 70) return "bg-green-500"
     if (score >= 50) return "bg-amber-500"
@@ -254,12 +247,6 @@ export function ProjectHealthCheck() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {analysisComplete && (
-            <Button variant="outline" size="sm" onClick={resetAnalysis}>
-              <RotateCcw className="mr-2 h-4 w-4" />
-              Reset Analysis
-            </Button>
-          )}
           <Button variant="outline" size="sm">
             <Download className="mr-2 h-4 w-4" />
             Export Report
@@ -304,7 +291,7 @@ export function ProjectHealthCheck() {
                 Analyse Project
               </Button>
               <p className="text-xs text-blue-500 mt-2">
-                Sources: Project Documents • Jira • Financial Data • Will analyze {scenario.name} scenario
+                Sources: Project Documents • Jira • Financial Data • Demo: Will use {scenario.name} scenario
               </p>
             </div>
           )}
