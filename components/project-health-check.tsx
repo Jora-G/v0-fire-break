@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import {
-  Upload,
   FileText,
   RefreshCw,
   AlertTriangle,
@@ -17,6 +16,7 @@ import {
   Settings,
   Download,
   Brain,
+  RotateCcw,
 } from "lucide-react"
 
 // Sample project scenarios for demonstration
@@ -169,19 +169,14 @@ const projectScenarios = [
 export function ProjectHealthCheck() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisStep, setAnalysisStep] = useState("")
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [currentScenario, setCurrentScenario] = useState(0)
   const [analysisComplete, setAnalysisComplete] = useState(false)
 
-  const analyzeDocuments = async (files: FileList) => {
+  const analyzeDocuments = async () => {
     setIsAnalyzing(true)
     setAnalysisComplete(false)
 
-    // Convert FileList to array of file names
-    const fileNames = Array.from(files).map((file) => file.name)
-    setUploadedFiles(fileNames)
-
-    setAnalysisStep("Uploading and processing documents...")
+    setAnalysisStep("Connecting to data sources...")
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     setAnalysisStep("Extracting content from PowerPoint presentations...")
@@ -192,6 +187,9 @@ export function ProjectHealthCheck() {
 
     setAnalysisStep("Processing Word documents and project plans...")
     await new Promise((resolve) => setTimeout(resolve, 800))
+
+    setAnalysisStep("Retrieving Jira project data and issue tracking...")
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     setAnalysisStep("AI analysis: Evaluating value delivery alignment...")
     await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -213,6 +211,12 @@ export function ProjectHealthCheck() {
 
     setIsAnalyzing(false)
     setAnalysisComplete(true)
+    setAnalysisStep("")
+  }
+
+  const resetAnalysis = () => {
+    setIsAnalyzing(false)
+    setAnalysisComplete(false)
     setAnalysisStep("")
   }
 
@@ -246,10 +250,16 @@ export function ProjectHealthCheck() {
         <div>
           <h2 className="text-2xl font-bold">Project Health Check</h2>
           <p className="text-muted-foreground">
-            AI-powered analysis of failing project documentation to identify governance and management gaps
+            AI-powered analysis of project documentation to identify governance and management gaps
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {analysisComplete && (
+            <Button variant="outline" size="sm" onClick={resetAnalysis}>
+              <RotateCcw className="mr-2 h-4 w-4" />
+              Reset Analysis
+            </Button>
+          )}
           <Button variant="outline" size="sm">
             <Download className="mr-2 h-4 w-4" />
             Export Report
@@ -257,15 +267,15 @@ export function ProjectHealthCheck() {
         </div>
       </div>
 
-      {/* Document Upload Section */}
+      {/* AI Analysis & Data Sources */}
       <Card className="border-blue-200 bg-blue-50">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Upload className="h-5 w-5 text-blue-600" />
-            Document Upload & AI Analysis
+            <Brain className="h-5 w-5 text-blue-600" />
+            AI Analysis & Data Sources
           </CardTitle>
           <CardDescription>
-            Upload project documents from failing projects for comprehensive health assessment
+            Comprehensive analysis of project data from multiple sources including documentation and Jira
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -273,7 +283,7 @@ export function ProjectHealthCheck() {
             <div className="p-4 bg-blue-100 border border-blue-300 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <RefreshCw className="h-4 w-4 animate-spin text-blue-600" />
-                <span className="font-medium text-blue-900">Analyzing Project Documents...</span>
+                <span className="font-medium text-blue-900">Analyzing Project Data...</span>
               </div>
               <p className="text-sm text-blue-700">{analysisStep}</p>
               <div className="mt-2">
@@ -284,32 +294,17 @@ export function ProjectHealthCheck() {
 
           {!analysisComplete && !isAnalyzing && (
             <div className="border-2 border-dashed border-blue-300 rounded-lg p-8 text-center">
-              <Upload className="h-12 w-12 text-blue-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-blue-900 mb-2">Upload Project Documents</h3>
+              <Brain className="h-12 w-12 text-blue-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-blue-900 mb-2">Ready to Analyze Project Health</h3>
               <p className="text-sm text-blue-600 mb-4">
-                Upload PowerPoint, Excel, Word, and PDF files from your failing project
+                AI will analyze project documentation, Jira data, and other sources for comprehensive health assessment
               </p>
-              <input
-                type="file"
-                multiple
-                accept=".ppt,.pptx,.xls,.xlsx,.doc,.docx,.pdf"
-                onChange={(e) => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    analyzeDocuments(e.target.files)
-                  }
-                }}
-                className="hidden"
-                id="document-upload"
-              />
-              <label
-                htmlFor="document-upload"
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer"
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                Choose Files
-              </label>
+              <Button onClick={() => analyzeDocuments()} className="bg-blue-600 text-white hover:bg-blue-700">
+                <Brain className="mr-2 h-4 w-4" />
+                Analyse Project
+              </Button>
               <p className="text-xs text-blue-500 mt-2">
-                Supports PPT, Excel, Word, PDF files • Demo: Will use {scenario.name} scenario
+                Sources: Project Documents • Jira • Financial Data • Will analyze {scenario.name} scenario
               </p>
             </div>
           )}
@@ -321,7 +316,7 @@ export function ProjectHealthCheck() {
                 <span className="font-medium text-green-900">Analysis Complete!</span>
               </div>
               <p className="text-sm text-green-700 mb-2">
-                Successfully analyzed {scenario.documents.length} documents from: <strong>{scenario.name}</strong>
+                Successfully analyzed project data from: <strong>{scenario.name}</strong>
               </p>
               <div className="flex flex-wrap gap-2">
                 {scenario.documents.map((doc, index) => (
@@ -330,6 +325,10 @@ export function ProjectHealthCheck() {
                     {doc}
                   </Badge>
                 ))}
+                <Badge variant="outline" className="text-xs">
+                  <Settings className="mr-1 h-3 w-3" />
+                  Jira Data
+                </Badge>
               </div>
             </div>
           )}
