@@ -218,6 +218,7 @@ export function ProjectHealthCheck() {
     setIsAnalyzing(false)
     setAnalysisComplete(false)
     setAnalysisStep("")
+    setUploadedFiles([])
   }
 
   const getHealthColor = (score: number) => {
