@@ -6,11 +6,20 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Download, FileText, Edit, Plus, Save, X, RefreshCw, Upload } from "lucide-react"
+import { Download, FileText, Edit, Plus, Save, X, ChevronRight, RefreshCw, Eye, Upload } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 // Template data
 const portfolioScorecardData = [
@@ -901,9 +910,10 @@ const changeRequestTemplate = {
   changeRequestorEmail: "david.wilson@company.com",
   changeApprover: "Emma Rodriguez - Project Director",
   changeTitle: "Add Advanced Security Monitoring Package",
-  changeType: "Scope Expansion",
+  changeType: "Scope Addition",
   priority: "High",
   urgency: "Medium",
+  changeCategory: "Scope Expansion",
   changeDescription:
     "Add the Advanced Security Monitoring package to our cloud services subscription to enhance threat detection, compliance monitoring, and automated incident response capabilities. This enhancement includes AI-powered anomaly detection, real-time threat intelligence, automated incident response workflows, and comprehensive compliance reporting features that were not included in the original project scope.",
   businessJustification:
@@ -1287,10 +1297,10 @@ export function SmartGovernance() {
   const [editingChangeRequest, setEditingChangeRequest] = useState(false)
   const [changeRequestData, setChangeRequestData] = useState(changeRequestTemplate)
   const [editingDecisions, setEditingDecisions] = useState(false)
-  const [decisionsState, setDecisionsState] = useState(decisionsData)
+  const [decisionsState, setDecisionsState] = useState(decisionsData) // Fixed: decisionsData is now declared
   const [editingInception, setEditingInception] = useState(false)
   const [editingProjectData, setEditingProjectData] = useState(false)
-  const [projectData, setProjectData] = useState(projectDataTemplate)
+  const [projectData, setProjectData] = useState(projectDataTemplate) // Fixed: projectDataTemplate is now declared
   const [riskIssueFilter, setRiskIssueFilter] = useState("all")
   const [editingStageGates, setEditingStageGates] = useState(false)
   const [selectedDecision, setSelectedDecision] = useState(null)
@@ -2865,7 +2875,6 @@ export function SmartGovernance() {
         </TabsContent>
 
         <TabsContent value="stage-gates">
-          {/* Stage Gates content - keeping existing implementation */}
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -2892,13 +2901,875 @@ export function SmartGovernance() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent>{/* Existing Stage Gates implementation */}</CardContent>
+            <CardContent>
+              {/* Gate Progress Overview */}
+              <Card className="mb-6 border-blue-200 bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="text-lg">Project Gate Progress</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-6 gap-2">
+                      {stageGatesData.map((gate, index) => (
+                        <div key={gate.id} className="flex flex-col items-center">
+                          <div
+                            className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold mb-2 ${
+                              gate.status === "Complete"
+                                ? "bg-green-500"
+                                : gate.status === "In Progress"
+                                  ? "bg-blue-500"
+                                  : "bg-gray-400"
+                            }`}
+                          >
+                            {index}
+                          </div>
+                          <div className="text-xs text-center font-medium">{gate.phase}</div>
+                          <div className="text-xs text-center text-muted-foreground">{gate.progress}%</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between pt-2">
+                      <span className="text-sm font-medium">Overall Project Progress</span>
+                      <span className="text-sm font-bold">
+                        {Math.round(
+                          stageGatesData.reduce((acc, gate) => acc + gate.progress, 0) / stageGatesData.length,
+                        )}
+                        %
+                      </span>
+                    </div>
+                    <Progress
+                      value={Math.round(
+                        stageGatesData.reduce((acc, gate) => acc + gate.progress, 0) / stageGatesData.length,
+                      )}
+                      className="h-3"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Individual Gates */}
+              <div className="space-y-6">
+                {stageGatesData.map((gate, gateIndex) => (
+                  <Collapsible key={gate.id} defaultOpen={gate.status === "In Progress"}>
+                    <Card className={`${gate.status === "In Progress" ? "border-blue-500 border-2" : ""}`}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
+                                gate.status === "Complete"
+                                  ? "bg-green-500"
+                                  : gate.status === "In Progress"
+                                    ? "bg-blue-500"
+                                    : "bg-gray-400"
+                              }`}
+                            >
+                              {gateIndex}
+                            </div>
+                            <div>
+                              <CollapsibleTrigger className="flex items-center gap-2 hover:text-blue-600">
+                                <h3 className="text-xl font-bold">{gate.name}</h3>
+                                <ChevronRight className="h-5 w-5 transition-transform group-data-[state=open]:rotate-90" />
+                              </CollapsibleTrigger>
+                              <p className="text-sm text-muted-foreground">{gate.description}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <div className="text-sm font-medium">Gate Review</div>
+                              <div className="text-xs text-muted-foreground">
+                                {gate.gateReviewDate || "Not Scheduled"}
+                              </div>
+                            </div>
+                            <Badge
+                              className={`${
+                                gate.approvalStatus === "Approved"
+                                  ? "bg-green-500"
+                                  : gate.approvalStatus === "In Review"
+                                    ? "bg-blue-500"
+                                    : "bg-gray-400"
+                              } min-w-[100px] justify-center`}
+                            >
+                              {gate.approvalStatus}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardHeader>
+
+                      <CollapsibleContent>
+                        <CardContent className="space-y-6">
+                          {/* Gate Metadata */}
+                          <div className="grid grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+                            <div>
+                              <div className="text-xs font-medium text-muted-foreground">Phase</div>
+                              <div className="text-sm font-semibold">{gate.phase}</div>
+                            </div>
+                            <div>
+                              <div className="text-xs font-medium text-muted-foreground">Approval Authority</div>
+                              <div className="text-sm font-semibold">{gate.approvalAuthority}</div>
+                            </div>
+                            <div>
+                              <div className="text-xs font-medium text-muted-foreground">Next Gate</div>
+                              <div className="text-sm font-semibold">{gate.nextGateDate || "TBD"}</div>
+                            </div>
+                            <div>
+                              <div className="text-xs font-medium text-muted-foreground">Progress</div>
+                              <div className="flex items-center gap-2">
+                                <Progress value={gate.progress} className="flex-1 h-2" />
+                                <span className="text-sm font-semibold">{gate.progress}%</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Entry Criteria */}
+                          <div>
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center text-blue-600 text-xs font-bold">
+                                IN
+                              </div>
+                              Entry Criteria
+                            </h4>
+                            <div className="space-y-2 pl-8">
+                              {gate.entryCriteria.map((criteria, index) => (
+                                <div
+                                  key={criteria.id}
+                                  className="flex items-center justify-between p-2 bg-white border rounded"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <input
+                                      type="checkbox"
+                                      checked={criteria.status === "Complete"}
+                                      onChange={(e) => {
+                                        if (editingStageGates) {
+                                          const newStageGates = [...stageGatesData]
+                                          newStageGates[gateIndex].entryCriteria[index].status = e.target.checked
+                                            ? "Complete"
+                                            : "Not Started"
+                                          setStageGatesData(newStageGates)
+                                        }
+                                      }}
+                                      disabled={!editingStageGates}
+                                      className="rounded"
+                                    />
+                                    <span
+                                      className={`text-sm ${criteria.status === "Complete" ? "line-through text-muted-foreground" : ""}`}
+                                    >
+                                      {criteria.criterion}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    {criteria.mandatory && (
+                                      <Badge variant="destructive" className="text-xs">
+                                        Mandatory
+                                      </Badge>
+                                    )}
+                                    <Badge
+                                      variant={
+                                        criteria.status === "Complete"
+                                          ? "default"
+                                          : criteria.status === "In Progress"
+                                            ? "secondary"
+                                            : "outline"
+                                      }
+                                      className="text-xs"
+                                    >
+                                      {criteria.status}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Exit Criteria */}
+                          <div>
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center text-green-600 text-xs font-bold">
+                                OUT
+                              </div>
+                              Exit Criteria
+                            </h4>
+                            <div className="space-y-2 pl-8">
+                              {gate.exitCriteria.map((criteria, index) => (
+                                <div
+                                  key={criteria.id}
+                                  className="flex items-center justify-between p-2 bg-white border rounded"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <input
+                                      type="checkbox"
+                                      checked={criteria.status === "Complete"}
+                                      onChange={(e) => {
+                                        if (editingStageGates) {
+                                          const newStageGates = [...stageGatesData]
+                                          newStageGates[gateIndex].exitCriteria[index].status = e.target.checked
+                                            ? "Complete"
+                                            : "Not Started"
+
+                                          // Auto-calculate gate progress based on exit criteria
+                                          const completedCount = newStageGates[gateIndex].exitCriteria.filter(
+                                            (c) => c.status === "Complete",
+                                          ).length
+                                          const totalCount = newStageGates[gateIndex].exitCriteria.length
+                                          newStageGates[gateIndex].progress = Math.round(
+                                            (completedCount / totalCount) * 100,
+                                          )
+
+                                          // Update gate status
+                                          if (newStageGates[gateIndex].progress === 100) {
+                                            newStageGates[gateIndex].status = "Complete"
+                                          } else if (newStageGates[gateIndex].progress > 0) {
+                                            newStageGates[gateIndex].status = "In Progress"
+                                          } else {
+                                            newStageGates[gateIndex].status = "Not Started"
+                                          }
+
+                                          setStageGatesData(newStageGates)
+                                        }
+                                      }}
+                                      disabled={!editingStageGates}
+                                      className="rounded"
+                                    />
+                                    <span
+                                      className={`text-sm ${criteria.status === "Complete" ? "line-through text-muted-foreground" : ""}`}
+                                    >
+                                      {criteria.criterion}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    {criteria.mandatory && (
+                                      <Badge variant="destructive" className="text-xs">
+                                        Mandatory
+                                      </Badge>
+                                    )}
+                                    <Badge
+                                      variant={
+                                        criteria.status === "Complete"
+                                          ? "default"
+                                          : criteria.status === "In Progress"
+                                            ? "secondary"
+                                            : "outline"
+                                      }
+                                      className="text-xs"
+                                    >
+                                      {criteria.status}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Required Artifacts */}
+                          <div>
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <FileText className="h-5 w-5 text-purple-600" />
+                              Required Artifacts
+                            </h4>
+                            <div className="space-y-2">
+                              {gate.requiredArtifacts.map((artifact) => (
+                                <div
+                                  key={artifact.id}
+                                  className="flex items-center justify-between p-3 bg-white border rounded"
+                                >
+                                  <div>
+                                    <div className="font-medium text-sm">{artifact.name}</div>
+                                    <div className="text-xs text-muted-foreground">Approver: {artifact.approver}</div>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Badge variant="outline" className="text-xs">
+                                      {artifact.status}
+                                    </Badge>
+                                    {artifact.approved && <Badge className="bg-green-500 text-xs">Approved</Badge>}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Budget Gate */}
+                          <div>
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <div className="w-5 h-5 bg-yellow-100 rounded flex items-center justify-center text-yellow-600 text-xs font-bold">
+                                £
+                              </div>
+                              Budget Gate
+                            </h4>
+                            <div className="grid grid-cols-4 gap-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                              <div>
+                                <div className="text-xs font-medium text-muted-foreground">Requested Budget</div>
+                                <div className="text-sm font-bold">
+                                  £{gate.budgetGate.requestedBudget.toLocaleString()}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="text-xs font-medium text-muted-foreground">Approved Budget</div>
+                                <div className="text-sm font-bold text-green-600">
+                                  £{gate.budgetGate.approvedBudget.toLocaleString()}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="text-xs font-medium text-muted-foreground">Status</div>
+                                <Badge
+                                  className={`${gate.budgetGate.budgetStatus === "Approved" || gate.budgetGate.budgetStatus === "Confirmed" ? "bg-green-500" : "bg-gray-500"}`}
+                                >
+                                  {gate.budgetGate.budgetStatus}
+                                </Badge>
+                              </div>
+                              <div>
+                                <div className="text-xs font-medium text-muted-foreground">Funding Source</div>
+                                <div className="text-sm font-semibold">{gate.budgetGate.fundingSource}</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Compliance Checks */}
+                          <div>
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <div className="w-5 h-5 bg-red-100 rounded flex items-center justify-center text-red-600 text-xs font-bold">
+                                ✓
+                              </div>
+                              Compliance & Quality Checks
+                            </h4>
+                            <div className="space-y-2">
+                              {gate.complianceChecks.map((check) => (
+                                <div
+                                  key={check.id}
+                                  className="flex items-center justify-between p-2 bg-white border rounded"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <input
+                                      type="checkbox"
+                                      checked={check.status === "Complete"}
+                                      onChange={(e) => {
+                                        if (editingStageGates) {
+                                          const newStageGates = [...stageGatesData]
+                                          const checkIndex = newStageGates[gateIndex].complianceChecks.findIndex(
+                                            (c) => c.id === check.id,
+                                          )
+                                          newStageGates[gateIndex].complianceChecks[checkIndex].status = e.target
+                                            .checked
+                                            ? "Complete"
+                                            : "Pending"
+                                          setStageGatesData(newStageGates)
+                                        }
+                                      }}
+                                      disabled={!editingStageGates}
+                                      className="rounded"
+                                    />
+                                    <span className="text-sm">{check.check}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    {check.mandatory && (
+                                      <Badge variant="destructive" className="text-xs">
+                                        Mandatory
+                                      </Badge>
+                                    )}
+                                    <Badge
+                                      variant={
+                                        check.status === "Complete"
+                                          ? "default"
+                                          : check.status === "In Progress"
+                                            ? "secondary"
+                                            : "outline"
+                                      }
+                                      className="text-xs"
+                                    >
+                                      {check.status}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Gate Risks */}
+                          <div>
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <div className="w-5 h-5 bg-orange-100 rounded flex items-center justify-center text-orange-600 text-xs font-bold">
+                                !
+                              </div>
+                              Gate-Specific Risks
+                            </h4>
+                            <div className="space-y-2">
+                              {gate.risks.map((risk) => (
+                                <div
+                                  key={risk.id}
+                                  className={`p-3 border rounded ${
+                                    risk.severity === "High"
+                                      ? "bg-red-50 border-red-200"
+                                      : risk.severity === "Medium"
+                                        ? "bg-orange-50 border-orange-200"
+                                        : "bg-yellow-50 border-yellow-200"
+                                  }`}
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium">{risk.description}</span>
+                                    <div className="flex items-center gap-2">
+                                      <Badge
+                                        className={`${
+                                          risk.severity === "High"
+                                            ? "bg-red-500"
+                                            : risk.severity === "Medium"
+                                              ? "bg-orange-500"
+                                              : "bg-yellow-500"
+                                        }`}
+                                      >
+                                        {risk.severity}
+                                      </Badge>
+                                      {risk.mitigated && <Badge className="bg-green-500 text-xs">Mitigated</Badge>}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Approval Workflow */}
+                          <div>
+                            <h4 className="font-semibold mb-3 flex items-center gap-2">
+                              <div className="w-5 h-5 bg-green-100 rounded flex items-center justify-center text-green-600 text-xs font-bold">
+                                ✓
+                              </div>
+                              Approval Workflow
+                            </h4>
+                            <div className="space-y-3">
+                              {gate.approvers.map((approver, approverIndex) => (
+                                <div
+                                  key={approver.id}
+                                  className="flex items-center justify-between p-3 bg-white border rounded"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold text-sm">
+                                      {approver.order}
+                                    </div>
+                                    <div>
+                                      <div className="font-medium text-sm">{approver.name}</div>
+                                      <div className="text-sm text-muted-foreground">{approver.role}</div>
+                                      {approver.comments && (
+                                        <div className="text-xs text-muted-foreground italic mt-1">
+                                          "{approver.comments}"
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="text-right">
+                                    <Badge
+                                      className={`${
+                                        approver.status === "Approved"
+                                          ? "bg-green-500"
+                                          : approver.status === "Rejected"
+                                            ? "bg-red-500"
+                                            : "bg-gray-400"
+                                      }`}
+                                    >
+                                      {approver.status}
+                                    </Badge>
+                                    {approver.date && (
+                                      <div className="text-xs text-muted-foreground">{approver.date}</div>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Gate Decision Summary */}
+                          {gate.approvalStatus === "Approved" && (
+                            <Card className="border-green-200 bg-green-50">
+                              <CardContent className="pt-6">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white">
+                                    ✓
+                                  </div>
+                                  <span className="font-semibold text-green-900">
+                                    Gate Approved - Proceed to Next Phase
+                                  </span>
+                                </div>
+                                <p className="text-sm text-green-700">
+                                  All mandatory criteria met. Approval authority: {gate.approvalAuthority}. Gate review
+                                  completed: {gate.gateReviewDate}.
+                                </p>
+                              </CardContent>
+                            </Card>
+                          )}
+                        </CardContent>
+                      </CollapsibleContent>
+                    </Card>
+                  </Collapsible>
+                ))}
+              </div>
+            </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="milestones">{/* Existing Milestones implementation */}</TabsContent>
+        <TabsContent value="milestones">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Project Milestones</CardTitle>
+                  <CardDescription>
+                    Key project milestones and delivery dates - {milestonesState.length} total milestones
+                  </CardDescription>
+                </div>
+                <Button
+                  variant={editingMilestones ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setEditingMilestones(!editingMilestones)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {editingMilestones ? <Save className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+                  {editingMilestones ? "Save Changes" : "Edit Milestones"}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Milestone ID</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Purpose</TableHead>
+                      <TableHead>Due Date</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Owner</TableHead>
+                      <TableHead>Progress</TableHead>
+                      <TableHead>Priority</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Variance</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {milestonesState.map((milestone, index) => (
+                      <TableRow key={milestone.id}>
+                        <TableCell className="font-medium">{milestone.id}</TableCell>
+                        <TableCell>
+                          {editingMilestones ? (
+                            <Input
+                              value={milestone.name}
+                              onChange={(e) => {
+                                const newData = [...milestonesState]
+                                newData[index].name = e.target.value
+                                setMilestonesState(newData)
+                              }}
+                            />
+                          ) : (
+                            milestone.name
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {editingMilestones ? (
+                            <Input
+                              value={milestone.purpose || ""}
+                              onChange={(e) => {
+                                const newData = [...milestonesState]
+                                newData[index].purpose = e.target.value
+                                setMilestonesState(newData)
+                              }}
+                            />
+                          ) : (
+                            milestone.purpose || ""
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {editingMilestones ? (
+                            <Input
+                              value={milestone.dueDate}
+                              onChange={(e) => {
+                                const newData = [...milestonesState]
+                                newData[index].dueDate = e.target.value
+                                setMilestonesState(newData)
+                              }}
+                            />
+                          ) : (
+                            milestone.dueDate
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={`${getStatusColor(milestone.status)} min-w-[80px] justify-center`}>
+                            {milestone.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {editingMilestones ? (
+                            <Input
+                              value={milestone.owner}
+                              onChange={(e) => {
+                                const newData = [...milestonesState]
+                                newData[index].owner = e.target.value
+                                setMilestonesState(newData)
+                              }}
+                            />
+                          ) : (
+                            milestone.owner
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Progress value={milestone.progress} className="w-16 h-2" />
+                            <span className="text-sm">{milestone.progress}%</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={`${getPriorityColor(milestone.priority)} min-w-[60px] justify-center`}>
+                            {milestone.priority}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{milestone.category}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          {milestone.variance !== undefined && (
+                            <Badge
+                              className={`${
+                                milestone.variance === 0
+                                  ? "bg-green-500"
+                                  : milestone.variance > 0
+                                    ? "bg-red-500"
+                                    : "bg-blue-500"
+                              }`}
+                            >
+                              {milestone.variance > 0 ? "+" : ""}
+                              {milestone.variance} days
+                            </Badge>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
 
-        <TabsContent value="financials">{/* Existing Financials implementation */}</TabsContent>
+              {editingMilestones && (
+                <div className="mt-4">
+                  <Button
+                    onClick={() => {
+                      const newMilestone = {
+                        id: `M${String(milestonesState.length + 1).padStart(3, "0")}`,
+                        name: "New Milestone",
+                        dueDate: "TBD",
+                        status: "Not Started",
+                        owner: "",
+                        progress: 0,
+                        purpose: "Define milestone purpose",
+                        priority: "Medium",
+                        category: "General",
+                        dependencies: "TBD",
+                        deliverables: "TBD",
+                        actualCompletionDate: null,
+                        variance: 0,
+                      }
+                      setMilestonesState([...milestonesState, newMilestone])
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add New Milestone
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="financials">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Project Financials</CardTitle>
+                  <CardDescription>
+                    Comprehensive financial data and budget tracking for selected project
+                  </CardDescription>
+                </div>
+                <Button
+                  variant={editingProjectData ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setEditingProjectData(!editingProjectData)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {editingProjectData ? <Save className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+                  {editingProjectData ? "Save Changes" : "Edit Financial Data"}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Project ID</label>
+                    <p className="mt-1 text-sm font-mono">{projectData.projectId}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Project Name</label>
+                    <p className="mt-1 text-sm">{projectData.projectName}</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Last Updated</label>
+                    <p className="mt-1 text-sm">{projectData.lastUpdated}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Updated By</label>
+                    <p className="mt-1 text-sm">{projectData.updatedBy}</p>
+                  </div>
+                </div>
+              </div>
+
+              <Card className="border-blue-200 bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="text-lg">Budget Overview</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                      <label className="text-sm font-medium">Total Budget</label>
+                      <p className="mt-1 text-lg font-bold">£{projectData.totalBudget.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Spent to Date</label>
+                      <p className="mt-1 text-lg font-bold text-blue-600">
+                        £{projectData.spentToDate.toLocaleString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Remaining Budget</label>
+                      <p className="mt-1 text-lg font-bold text-green-600">
+                        £{(projectData.totalBudget - projectData.spentToDate).toLocaleString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Budget Utilization</label>
+                      <p className="mt-1 text-lg font-bold">
+                        {Math.round((projectData.spentToDate / projectData.totalBudget) * 100)}%
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Budget Progress</span>
+                      <span>{Math.round((projectData.spentToDate / projectData.totalBudget) * 100)}%</span>
+                    </div>
+                    <Progress value={(projectData.spentToDate / projectData.totalBudget) * 100} className="h-3" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Budget Breakdown by Category</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {projectData.budgetBreakdown.map((category, index) => (
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">{category.category}</span>
+                          <div className="text-right">
+                            <span className="text-sm text-muted-foreground">
+                              £{category.spent.toLocaleString()} / £{category.budgeted.toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                        <Progress value={(category.spent / category.budgeted) * 100} className="h-2" />
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>{category.percentage}% of total budget</span>
+                          <span>£{category.remaining.toLocaleString()} remaining</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Monthly Spend Analysis</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {projectData.monthlySpend.map((month, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                        <span className="font-medium">{month.month}</span>
+                        <div className="flex items-center gap-4">
+                          <span className="text-sm">Budgeted: £{month.budgeted.toLocaleString()}</span>
+                          <span className="text-sm">Actual: £{month.actual.toLocaleString()}</span>
+                          <Badge className={`${month.variance >= 0 ? "bg-red-500" : "bg-green-500"}`}>
+                            {month.variance >= 0 ? "+" : ""}£{month.variance.toLocaleString()}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Risk Adjustments & Contingency</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">Contingency Reserve</label>
+                        <p className="mt-1 text-lg font-bold">£{projectData.contingencyReserve.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Management Reserve</label>
+                        <p className="mt-1 text-lg font-bold">£{projectData.managementReserve.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-3">Risk-Based Budget Adjustments</h4>
+                      <div className="space-y-2">
+                        {projectData.riskAdjustments.map((risk, index) => (
+                          <div key={index} className="flex justify-between items-center p-2 bg-amber-50 rounded">
+                            <span className="text-sm">{risk.description}</span>
+                            <div className="text-right">
+                              <span className="text-sm font-medium">
+                                £{risk.amount.toLocaleString()} ({Math.round(risk.probability * 100)}% prob)
+                              </span>
+                              <div className="text-xs text-muted-foreground">
+                                Expected: £{risk.expectedValue.toLocaleString()}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Change Request Financial Impact</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {projectData.changeRequestImpacts.map((cr, index) => (
+                      <div key={index} className="flex justify-between items-center p-3 border rounded">
+                        <div>
+                          <span className="font-medium">{cr.id}</span>
+                          <p className="text-sm text-muted-foreground">{cr.description}</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-bold">£{cr.amount.toLocaleString()}</span>
+                          <Badge className={`ml-2 ${cr.approved ? "bg-green-500" : "bg-amber-500"}`}>
+                            {cr.approved ? "Approved" : "Pending"}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="change-request">
           <Card>
@@ -3056,10 +3927,24 @@ export function SmartGovernance() {
                   </div>
                   <div>
                     <label className="text-sm font-medium">Change Type</label>
+                    <Badge variant="outline">{changeRequestData.changeType}</Badge>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Change Approver</label>
+                    <p className="mt-1 text-sm">{changeRequestData.changeApprover}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Urgency</label>
+                    <Badge variant="outline">{changeRequestData.urgency}</Badge>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Change Category</label>
                     {editingChangeRequest ? (
                       <Select
-                        value={changeRequestData.changeType}
-                        onValueChange={(value) => setChangeRequestData({ ...changeRequestData, changeType: value })}
+                        value={changeRequestData.changeCategory}
+                        onValueChange={(value) => setChangeRequestData({ ...changeRequestData, changeCategory: value })}
                       >
                         <SelectTrigger className="mt-1">
                           <SelectValue />
@@ -3072,18 +3957,8 @@ export function SmartGovernance() {
                         </SelectContent>
                       </Select>
                     ) : (
-                      <p className="mt-1 text-sm">{changeRequestData.changeType}</p>
+                      <p className="mt-1 text-sm">{changeRequestData.changeCategory}</p>
                     )}
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium">Change Approver</label>
-                    <p className="mt-1 text-sm">{changeRequestData.changeApprover}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium">Urgency</label>
-                    <Badge variant="outline">{changeRequestData.urgency}</Badge>
                   </div>
                   <div>
                     <label className="text-sm font-medium">Requestor Email</label>
@@ -3189,11 +4064,607 @@ export function SmartGovernance() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="risks">{/* Existing Risks implementation */}</TabsContent>
+        <TabsContent value="risks">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Risks & Issues Register</CardTitle>
+                  <CardDescription>
+                    Comprehensive project risks and issues tracking and management - {risksData.length} total items
+                  </CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Select value={riskIssueFilter} onValueChange={setRiskIssueFilter}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All ({risksData.length})</SelectItem>
+                      <SelectItem value="Risk">Risks ({risksData.filter((r) => r.type === "Risk").length})</SelectItem>
+                      <SelectItem value="Issue">
+                        Issues ({risksData.filter((r) => r.type === "Issue").length})
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant={editingRisks ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setEditingRisks(!editingRisks)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {editingRisks ? <Save className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+                    {editingRisks ? "Save Changes" : "Edit Risks & Issues"}
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>ID</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Project</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Severity</TableHead>
+                      <TableHead>Probability</TableHead>
+                      <TableHead>Impact</TableHead>
+                      <TableHead>Owner</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Due Date</TableHead>
+                      <TableHead>Escalation</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredRisksIssues.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.id}</TableCell>
+                        <TableCell>
+                          <Badge variant={item.type === "Risk" ? "secondary" : "destructive"}>{item.type}</Badge>
+                        </TableCell>
+                        <TableCell className="max-w-[200px]">
+                          <div className="truncate" title={item.title}>
+                            {item.title}
+                          </div>
+                        </TableCell>
+                        <TableCell>{item.project}</TableCell>
+                        <TableCell>{item.category}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={`${
+                              item.severity === "Critical"
+                                ? "bg-red-600"
+                                : item.severity === "High"
+                                  ? "bg-red-500"
+                                  : item.severity === "Medium"
+                                    ? "bg-amber-500"
+                                    : "bg-green-500"
+                            }`}
+                          >
+                            {item.severity}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{item.probability}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={`${
+                              item.impact === "Critical"
+                                ? "bg-red-600"
+                                : item.impact === "High"
+                                  ? "bg-red-500"
+                                  : item.impact === "Medium"
+                                    ? "bg-amber-500"
+                                    : "bg-green-500"
+                            }`}
+                          >
+                            {item.impact}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{item.owner}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={`${
+                              item.status === "Open"
+                                ? "bg-red-500"
+                                : item.status === "In Progress"
+                                  ? "bg-amber-500"
+                                  : item.status === "Mitigated"
+                                    ? "bg-blue-500"
+                                    : "bg-green-500"
+                            }`}
+                          >
+                            {item.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{item.dueDate}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={`${
+                              item.escalationLevel >= 3
+                                ? "bg-red-500"
+                                : item.escalationLevel >= 2
+                                  ? "bg-amber-500"
+                                  : "bg-green-500"
+                            }`}
+                          >
+                            Level {item.escalationLevel}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {item.id}: {item.title}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  {item.type} • {item.project} • {item.category} • {item.severity} Severity
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="text-sm font-medium">Owner</label>
+                                    <p className="text-sm">{item.owner}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Due Date</label>
+                                    <p className="text-sm">{item.dueDate}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Date Identified</label>
+                                    <p className="text-sm">{item.dateIdentified}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Last Updated</label>
+                                    <p className="text-sm">{item.lastUpdated}</p>
+                                  </div>
+                                </div>
 
-        <TabsContent value="decisions">{/* Existing Decisions implementation */}</TabsContent>
+                                <div>
+                                  <label className="text-sm font-medium">Description</label>
+                                  <p className="text-sm mt-1">{item.description}</p>
+                                </div>
 
-        <TabsContent value="status">{/* Existing Status Report implementation */}</TabsContent>
+                                <div>
+                                  <label className="text-sm font-medium">Business Impact</label>
+                                  <p className="text-sm mt-1">{item.businessImpact}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Mitigation Plan</label>
+                                  <p className="text-sm mt-1">{item.mitigationPlan}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Contingency Plan</label>
+                                  <p className="text-sm mt-1">{item.contingencyPlan}</p>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                  <div>
+                                    <label className="text-sm font-medium">Risk Response</label>
+                                    <Badge variant="outline">{item.riskResponse}</Badge>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Escalation Level</label>
+                                    <Badge
+                                      className={`${
+                                        item.escalationLevel >= 3
+                                          ? "bg-red-500"
+                                          : item.escalationLevel >= 2
+                                            ? "bg-amber-500"
+                                            : "bg-green-500"
+                                      }`}
+                                    >
+                                      Level {item.escalationLevel}
+                                    </Badge>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Status</label>
+                                    <Badge
+                                      className={`${
+                                        item.status === "Open"
+                                          ? "bg-red-500"
+                                          : item.status === "In Progress"
+                                            ? "bg-amber-500"
+                                            : item.status === "Mitigated"
+                                              ? "bg-blue-500"
+                                              : "bg-green-500"
+                                      }`}
+                                    >
+                                      {item.status}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {editingRisks && (
+                <div className="mt-4">
+                  <Button
+                    onClick={() => {
+                      const newRisk = {
+                        id: `R${String(risksData.filter((r) => r.type === "Risk").length + 1).padStart(3, "0")}`,
+                        type: "Risk",
+                        title: "New Risk",
+                        project: "TBD",
+                        category: "Technical",
+                        severity: "Medium",
+                        probability: "Medium",
+                        impact: "Medium",
+                        owner: "",
+                        status: "Open",
+                        dueDate: "TBD",
+                        description: "Risk description",
+                        mitigationPlan: "Mitigation plan to be defined",
+                        contingencyPlan: "Contingency plan to be defined",
+                        riskResponse: "Mitigate",
+                        dateIdentified: new Date().toLocaleDateString("en-GB"),
+                        lastUpdated: new Date().toLocaleDateString("en-GB"),
+                        escalationLevel: 1,
+                        businessImpact: "Business impact to be assessed",
+                      }
+                      setRisksData([...risksData, newRisk])
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add New Risk/Issue
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="decisions">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Decision Repository</CardTitle>
+                  <CardDescription>
+                    Project decision tracking and audit trail - {decisionsState.length} total decisions
+                  </CardDescription>
+                </div>
+                <Button
+                  variant={editingDecisions ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setEditingDecisions(!editingDecisions)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {editingDecisions ? <Save className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+                  {editingDecisions ? "Save Changes" : "Edit Decisions"}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Decision ID</TableHead>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Project</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Priority</TableHead>
+                      <TableHead>Decision Maker</TableHead>
+                      <TableHead>Decision Date</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Latency</TableHead>
+                      <TableHead>Review Date</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {decisionsState.map((decision) => (
+                      <TableRow key={decision.id}>
+                        <TableCell className="font-medium">{decision.id}</TableCell>
+                        <TableCell className="max-w-[200px]">
+                          <div className="truncate" title={decision.title}>
+                            {decision.title}
+                          </div>
+                        </TableCell>
+                        <TableCell>{decision.project}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{decision.category}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge className={`${getPriorityColor(decision.priority)}`}>{decision.priority}</Badge>
+                        </TableCell>
+                        <TableCell className="max-w-[150px]">
+                          <div className="truncate" title={decision.decisionMaker}>
+                            {decision.decisionMaker}
+                          </div>
+                        </TableCell>
+                        <TableCell>{decision.decisionDate || "Pending"}</TableCell>
+                        <TableCell>
+                          <Badge className={`${getStatusColor(decision.status)}`}>{decision.status}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            className={`${decision.latencyDays <= 7 ? "bg-green-500" : decision.latencyDays <= 14 ? "bg-amber-500" : "bg-red-500"}`}
+                          >
+                            {decision.latencyDays} days
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{decision.reviewDate}</TableCell>
+                        <TableCell>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {decision.id}: {decision.title}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  {decision.project} • {decision.category} • {decision.priority} Priority •{" "}
+                                  {decision.status}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="text-sm font-medium">Decision Maker</label>
+                                    <p className="text-sm">{decision.decisionMaker}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Decision Date</label>
+                                    <p className="text-sm">{decision.decisionDate || "Pending"}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Submission Date</label>
+                                    <p className="text-sm">{decision.submissionDate}</p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Review Date</label>
+                                    <p className="text-sm">{decision.reviewDate}</p>
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Description</label>
+                                  <p className="text-sm mt-1">{decision.description}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Rationale</label>
+                                  <p className="text-sm mt-1">{decision.rationale}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Impact</label>
+                                  <p className="text-sm mt-1">{decision.impact}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Business Context</label>
+                                  <p className="text-sm mt-1">{decision.businessContext}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Technical Context</label>
+                                  <p className="text-sm mt-1">{decision.technicalContext}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Alternatives Considered</label>
+                                  <p className="text-sm mt-1">{decision.alternatives}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Stakeholders</label>
+                                  <p className="text-sm mt-1">{decision.stakeholders}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Risk Assessment</label>
+                                  <p className="text-sm mt-1">{decision.riskAssessment}</p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium">Success Criteria</label>
+                                  <p className="text-sm mt-1">{decision.successCriteria}</p>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="text-sm font-medium">Implementation Status</label>
+                                    <Badge className={`${getStatusColor(decision.implementationStatus)}`}>
+                                      {decision.implementationStatus}
+                                    </Badge>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium">Decision Latency</label>
+                                    <Badge
+                                      className={`${decision.latencyDays <= 7 ? "bg-green-500" : decision.latencyDays <= 14 ? "bg-amber-500" : "bg-red-500"}`}
+                                    >
+                                      {decision.latencyDays} days
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {editingDecisions && (
+                <div className="mt-4">
+                  <Button
+                    onClick={() => {
+                      const newDecision = {
+                        id: `DEC-${String(decisionsState.length + 1).padStart(3, "0")}`,
+                        title: "New Decision",
+                        project: "TBD",
+                        decisionDate: "",
+                        decisionMaker: "",
+                        category: "Technical",
+                        priority: "Medium",
+                        status: "Under Review",
+                        submissionDate: new Date().toLocaleDateString("en-GB"),
+                        latencyDays: 0,
+                        description: "Decision description to be added",
+                        rationale: "Decision rationale to be documented",
+                        impact: "Impact assessment to be completed",
+                        reviewDate: "",
+                        implementationStatus: "Pending Approval",
+                        alternatives: "Alternative options to be evaluated",
+                        stakeholders: "Stakeholder list to be defined",
+                        businessContext: "Business context to be documented",
+                        technicalContext: "Technical context to be provided",
+                        riskAssessment: "Risk assessment to be completed",
+                        successCriteria: "Success criteria to be defined",
+                        lessonsLearned: "Lessons learned to be captured post-implementation",
+                      }
+                      setDecisionsState([...decisionsState, newDecision])
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add New Decision
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="status">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Governance Report</CardTitle>
+                  <CardDescription>
+                    Timeline of key decisions, scope changes, risk alerts and process breakdowns
+                  </CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={resetDemoData}>
+                    Reset
+                  </Button>
+                  <Button
+                    onClick={generateStatusReport}
+                    disabled={isGenerating}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Generate Status Report
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {isGenerating && (
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <RefreshCw className="h-4 w-4 animate-spin text-blue-600" />
+                    <span className="font-medium text-blue-900">Generating Status Report...</span>
+                  </div>
+                  <p className="text-sm text-blue-700">{generationStep}</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Report Date</label>
+                    <p className="mt-1 text-sm">{statusData.reportDate}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Reporting Period</label>
+                    <p className="mt-1 text-sm">{statusData.reportingPeriod}</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Overall Status</label>
+                    <Badge
+                      className={`mt-1 ${
+                        statusData.overallStatus === "Green"
+                          ? "bg-green-500"
+                          : statusData.overallStatus === "Amber"
+                            ? "bg-amber-500"
+                            : "bg-red-500"
+                      }`}
+                    >
+                      {statusData.overallStatus}
+                    </Badge>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Last Generated</label>
+                    <p className="mt-1 text-sm">{lastGenerated}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="text-sm font-medium">Timeline of Key Decision Delays</label>
+                  <div className="mt-1 text-sm whitespace-pre-line">{statusData.keyDecisionDelays}</div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Scope Changes & Impact</label>
+                  <div className="mt-1 text-sm whitespace-pre-line">{statusData.scopeChanges}</div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Risk Alerts & Escalations</label>
+                  <div className="mt-1 text-sm whitespace-pre-line">{statusData.riskAlerts}</div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Actions Taken</label>
+                  <div className="mt-1 text-sm whitespace-pre-line">{statusData.actionsTaken}</div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Where Process Broke Down</label>
+                  <div className="mt-1 text-sm whitespace-pre-line">{statusData.processBreakdowns}</div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Next Steps</label>
+                  <div className="mt-1 text-sm whitespace-pre-line">{statusData.nextSteps}</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </div>
   )
