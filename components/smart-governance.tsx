@@ -539,23 +539,29 @@ const statusReportTemplate = {
   reportDate: "15-03-2025",
   reportingPeriod: "Week ending 15 March 2025",
   overallStatus: "Amber",
+  executiveSummary:
+    "• Awaiting status report generation to compile comprehensive project status\n• All governance data sources connected and ready for analysis\n• Integrated reporting across milestones, financials, risks, and decisions",
+  milestoneProgress:
+    "• Milestone completion analysis pending\n• Gate progression tracking ready\n• Timeline variance analysis to be generated",
+  financialStatus:
+    "• Budget utilization analysis pending\n• Spend trajectory tracking ready\n• Cost variance reporting to be compiled",
   keyDecisionDelays:
-    "• Awaiting governance report generation to identify decision bottlenecks\n• Decision timeline analysis pending\n• Approval workflow latency tracking ready",
+    "• Decision timeline analysis pending generation\n• Approval workflow latency tracking ready\n• Decision bottleneck identification to be performed",
   scopeChanges:
-    "• Scope change analysis will be generated from change request data\n• Impact assessment pending generation\n• Change velocity metrics ready for analysis",
+    "• Scope change impact assessment pending\n• Change request velocity tracking ready\n• Budget and timeline impacts to be analyzed",
   riskAlerts:
-    "• Risk escalation timeline pending generation\n• Critical risk emergence patterns to be analyzed\n• Mitigation effectiveness tracking ready",
+    "• Risk escalation timeline pending generation\n• Critical risk patterns to be analyzed\n• Mitigation effectiveness tracking ready",
   actionsTaken:
-    "• Governance actions log will be compiled\n• Response time analysis pending\n• Corrective measures timeline to be generated",
+    "• Governance actions log to be compiled\n• Response time analysis pending\n• Corrective measures timeline to be generated",
   processBreakdowns:
-    "• Process breakdown analysis pending generation\n• Root cause identification with specific dates\n• Improvement recommendations to be compiled",
-  nextSteps: "• Click 'Generate Status Report' to compile governance timeline and process analysis",
+    "• Process breakdown analysis pending generation\n• Root cause identification with dates\n• Improvement recommendations to be compiled",
+  nextSteps: "• Click 'Generate Status Report' to compile comprehensive project status across all governance areas",
 }
 
 const milestonesData = [
   {
-    id: "M001",
-    name: "Project Charter Approval",
+    id: "G001",
+    name: "Project Initiation Approval (PID)",
     dueDate: "01-09-2026",
     status: "Complete",
     owner: "Project Manager",
@@ -564,18 +570,18 @@ const milestonesData = [
     priority: "Critical",
     category: "Initiation",
     dependencies: "None",
-    deliverables: "Signed Project Charter, Executive Approval",
+    deliverables: "Signed Project PIS, Executive Approval",
     actualCompletionDate: "28-08-2026",
     variance: -4,
   },
   {
-    id: "M002",
-    name: "Stakeholder Analysis Complete",
+    id: "G002",
+    name: "Stakeholder Analysis Complete (RACI)",
     dueDate: "05-09-2026",
     status: "Complete",
-    owner: "Business Analyst",
+    owner: "Project Manager",
     progress: 100,
-    purpose: "Identify and analyze all project stakeholders",
+    purpose: "Identify and analyse all project stakeholders",
     priority: "High",
     category: "Planning",
     dependencies: "M001",
@@ -584,7 +590,7 @@ const milestonesData = [
     variance: -1,
   },
   {
-    id: "M003",
+    id: "G003",
     name: "Requirements Gathering Complete",
     dueDate: "15-09-2026",
     status: "Complete",
@@ -593,28 +599,28 @@ const milestonesData = [
     purpose: "Define and document all functional and non-functional requirements",
     priority: "Critical",
     category: "Analysis",
-    dependencies: "M002",
+    dependencies: "G002",
     deliverables: "Requirements Document, User Stories, Acceptance Criteria",
     actualCompletionDate: "18-09-2026",
     variance: 3,
   },
   {
-    id: "M004",
-    name: "Technical Architecture Design",
+    id: "G004",
+    name: "Solution Architecture Design",
     dueDate: "25-09-2026",
     status: "Complete",
     owner: "Solution Architect",
     progress: 100,
-    purpose: "Define technical architecture and system design",
+    purpose: "Define solution architecture and system design",
     priority: "Critical",
     category: "Design",
-    dependencies: "M003",
-    deliverables: "Architecture Document, Technical Specifications",
+    dependencies: "G003",
+    deliverables: "Architecture Document, Solution Specifications",
     actualCompletionDate: "26-09-2026",
     variance: 1,
   },
   {
-    id: "M005",
+    id: "G005",
     name: "Security Assessment Complete",
     dueDate: "30-09-2026",
     status: "Complete",
@@ -623,13 +629,13 @@ const milestonesData = [
     purpose: "Conduct comprehensive security risk assessment",
     priority: "High",
     category: "Security",
-    dependencies: "M004",
+    dependencies: "G004",
     deliverables: "Security Assessment Report, Risk Register",
     actualCompletionDate: "02-10-2026",
     variance: 2,
   },
   {
-    id: "M006",
+    id: "G006",
     name: "Vendor Selection Complete",
     dueDate: "05-10-2026",
     status: "Complete",
@@ -638,43 +644,43 @@ const milestonesData = [
     purpose: "Select and contract key technology vendors",
     priority: "High",
     category: "Procurement",
-    dependencies: "M004",
+    dependencies: "G004",
     deliverables: "Vendor Contracts, Service Level Agreements",
     actualCompletionDate: "07-10-2026",
     variance: 2,
   },
   {
-    id: "M007",
-    name: "Development Environment Setup",
+    id: "G007",
+    name: "Technical Architecture",
     dueDate: "10-10-2026",
     status: "Complete",
     owner: "DevOps Lead",
     progress: 100,
-    purpose: "Establish development and testing environments",
+    purpose: "Establish technical architecture",
     priority: "High",
     category: "Infrastructure",
-    dependencies: "M006",
-    deliverables: "Development Environment, CI/CD Pipeline",
+    dependencies: "G006",
+    deliverables: "Technical Arrchitecture Document",
     actualCompletionDate: "09-10-2026",
     variance: -1,
   },
   {
-    id: "M008",
-    name: "UI/UX Design Complete",
+    id: "G008",
+    name: "Risk and Compliance Plan Approved",
     dueDate: "15-10-2026",
     status: "In Progress",
-    owner: "Design Lead",
+    owner: "Project Manager",
     progress: 85,
-    purpose: "Finalize user interface and user experience designs",
+    purpose: "Establish risk comms and risk tolerance",
     priority: "High",
     category: "Design",
-    dependencies: "M003",
-    deliverables: "UI Mockups, UX Wireframes, Design System",
+    dependencies: "G003",
+    deliverables: "Risk log and toerance document",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M009",
+    id: "G009",
     name: "Data Migration Strategy",
     dueDate: "20-10-2026",
     status: "In Progress",
@@ -683,14 +689,14 @@ const milestonesData = [
     purpose: "Define comprehensive data migration approach",
     priority: "Critical",
     category: "Data Management",
-    dependencies: "M004",
+    dependencies: "G004",
     deliverables: "Migration Plan, Data Mapping, Validation Rules",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M010",
-    name: "Core Development Phase 1",
+    id: "M001",
+    name: "Core Development Process",
     dueDate: "30-11-2026",
     status: "Not Started",
     owner: "Development Lead",
@@ -698,14 +704,14 @@ const milestonesData = [
     purpose: "Implement core system functionality",
     priority: "Critical",
     category: "Development",
-    dependencies: "M008, M009",
+    dependencies: "G008, G009",
     deliverables: "Core Application, Unit Tests, Code Documentation",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M011",
-    name: "Integration Testing Phase 1",
+    id: "G010",
+    name: "Integration Testing Plan Approved",
     dueDate: "15-12-2026",
     status: "Not Started",
     owner: "QA Lead",
@@ -713,14 +719,14 @@ const milestonesData = [
     purpose: "Test system integrations and interfaces",
     priority: "High",
     category: "Testing",
-    dependencies: "M010",
+    dependencies: "G010",
     deliverables: "Integration Test Results, Defect Reports",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M012",
-    name: "User Acceptance Testing",
+    id: "G011",
+    name: "User Acceptance Plan",
     dueDate: "10-01-2027",
     status: "Not Started",
     owner: "Business Lead",
@@ -728,14 +734,14 @@ const milestonesData = [
     purpose: "Validate system meets business requirements",
     priority: "Critical",
     category: "Testing",
-    dependencies: "M011",
+    dependencies: "G011",
     deliverables: "UAT Results, User Sign-off, Change Requests",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M013",
-    name: "Performance Testing Complete",
+    id: "G012",
+    name: "Performance Testing Plan",
     dueDate: "20-01-2027",
     status: "Not Started",
     owner: "Performance Lead",
@@ -743,14 +749,14 @@ const milestonesData = [
     purpose: "Validate system performance under load",
     priority: "High",
     category: "Testing",
-    dependencies: "M011",
+    dependencies: "G011",
     deliverables: "Performance Test Results, Optimization Plan",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M014",
-    name: "Security Penetration Testing",
+    id: "G013",
+    name: "Security Penetration Testing Plan",
     dueDate: "25-01-2027",
     status: "Not Started",
     owner: "Security Lead",
@@ -758,58 +764,28 @@ const milestonesData = [
     purpose: "Comprehensive security testing and validation",
     priority: "Critical",
     category: "Security",
-    dependencies: "M012",
+    dependencies: "G012",
     deliverables: "Security Test Report, Vulnerability Assessment",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M015",
-    name: "Data Migration Phase 1",
-    dueDate: "05-02-2027",
-    status: "Not Started",
-    owner: "Data Lead",
-    progress: 0,
-    purpose: "Migrate critical business data to new platform",
-    priority: "Critical",
-    category: "Migration",
-    dependencies: "M014",
-    deliverables: "Migrated Data, Validation Reports, Rollback Plan",
-    actualCompletionDate: null,
-    variance: 0,
-  },
-  {
-    id: "M016",
-    name: "User Training Program Delivery",
+    id: "M002",
+    name: "Envorinment set-up",
     dueDate: "15-02-2027",
     status: "Not Started",
     owner: "Training Lead",
     progress: 0,
-    purpose: "Train end users on new system functionality",
+    purpose: "Set-up AWS Environments",
     priority: "High",
     category: "Training",
-    dependencies: "M015",
-    deliverables: "Training Materials, User Certification, Feedback",
-    actualCompletionDate: null,
-    variance: 0,
-  },
-  {
-    id: "M017",
-    name: "Production Environment Setup",
-    dueDate: "20-02-2027",
-    status: "Not Started",
-    owner: "DevOps Lead",
-    progress: 0,
-    purpose: "Prepare production environment for go-live",
-    priority: "Critical",
-    category: "Infrastructure",
     dependencies: "M014",
-    deliverables: "Production Environment, Monitoring Setup",
+    deliverables: "Hand-over environments to the dev team",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M018",
+    id: "G016",
     name: "Go-Live Readiness Review",
     dueDate: "25-02-2027",
     status: "Not Started",
@@ -818,28 +794,13 @@ const milestonesData = [
     purpose: "Final readiness assessment before production deployment",
     priority: "Critical",
     category: "Governance",
-    dependencies: "M016, M017",
+    dependencies: "G012, G015",
     deliverables: "Readiness Checklist, Go/No-Go Decision",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M019",
-    name: "Production Deployment",
-    dueDate: "28-02-2027",
-    status: "Not Started",
-    owner: "DevOps Lead",
-    progress: 0,
-    purpose: "Deploy system to production environment",
-    priority: "Critical",
-    category: "Deployment",
-    dependencies: "M018",
-    deliverables: "Production System, Deployment Report",
-    actualCompletionDate: null,
-    variance: 0,
-  },
-  {
-    id: "M020",
+    id: "G017",
     name: "Go-Live Support Period",
     dueDate: "15-03-2027",
     status: "Not Started",
@@ -848,13 +809,13 @@ const milestonesData = [
     purpose: "Provide intensive support during initial go-live period",
     priority: "High",
     category: "Support",
-    dependencies: "M019",
+    dependencies: "G016",
     deliverables: "Support Reports, Issue Resolution Log",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M021",
+    id: "G018",
     name: "Post-Implementation Review",
     dueDate: "30-03-2027",
     status: "Not Started",
@@ -863,13 +824,13 @@ const milestonesData = [
     purpose: "Comprehensive review of project success and lessons learned",
     priority: "Medium",
     category: "Review",
-    dependencies: "M020",
+    dependencies: "G017",
     deliverables: "PIR Report, Lessons Learned, Recommendations",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M022",
+    id: "G019",
     name: "Knowledge Transfer Complete",
     dueDate: "15-04-2027",
     status: "Not Started",
@@ -878,13 +839,13 @@ const milestonesData = [
     purpose: "Transfer technical knowledge to support teams",
     priority: "Medium",
     category: "Knowledge Transfer",
-    dependencies: "M021",
+    dependencies: "G018",
     deliverables: "Technical Documentation, Support Procedures",
     actualCompletionDate: null,
     variance: 0,
   },
   {
-    id: "M023",
+    id: "G020",
     name: "Project Closure",
     dueDate: "30-04-2027",
     status: "Not Started",
@@ -893,7 +854,7 @@ const milestonesData = [
     purpose: "Formal project closure and resource release",
     priority: "Low",
     category: "Closure",
-    dependencies: "M022",
+    dependencies: "G019",
     deliverables: "Project Closure Report, Final Sign-off",
     actualCompletionDate: null,
     variance: 0,
@@ -1297,10 +1258,10 @@ export function SmartGovernance() {
   const [editingChangeRequest, setEditingChangeRequest] = useState(false)
   const [changeRequestData, setChangeRequestData] = useState(changeRequestTemplate)
   const [editingDecisions, setEditingDecisions] = useState(false)
-  const [decisionsState, setDecisionsState] = useState(decisionsData) // Fixed: decisionsData is now declared
+  const [decisionsState, setDecisionsState] = useState(decisionsData)
   const [editingInception, setEditingInception] = useState(false)
   const [editingProjectData, setEditingProjectData] = useState(false)
-  const [projectData, setProjectData] = useState(projectDataTemplate) // Fixed: projectDataTemplate is now declared
+  const [projectData, setProjectData] = useState(projectDataTemplate)
   const [riskIssueFilter, setRiskIssueFilter] = useState("all")
   const [editingStageGates, setEditingStageGates] = useState(false)
   const [selectedDecision, setSelectedDecision] = useState(null)
@@ -1972,33 +1933,50 @@ export function SmartGovernance() {
   const generateStatusReport = async () => {
     setIsGenerating(true)
     setDemoMode(false)
-    setGenerationStep("Analyzing governance data sources...")
+    setGenerationStep("Analyzing all governance data sources...")
 
     await new Promise((resolve) => setTimeout(resolve, 1200))
-    setGenerationStep("Processing decision timeline and delays...")
+    setGenerationStep("Processing milestone and gate completion status...")
 
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    setGenerationStep("Analyzing scope changes and change requests...")
+    setGenerationStep("Analyzing financial performance and budget utilization...")
 
     await new Promise((resolve) => setTimeout(resolve, 800))
-    setGenerationStep("Reviewing risk alerts and escalations...")
+    setGenerationStep("Processing decision timeline and approval delays...")
 
     await new Promise((resolve) => setTimeout(resolve, 600))
-    setGenerationStep("Identifying process breakdowns and bottlenecks...")
+    setGenerationStep("Analyzing scope changes and change request impacts...")
 
     await new Promise((resolve) => setTimeout(resolve, 500))
+    setGenerationStep("Reviewing risk alerts and escalation patterns...")
 
+    await new Promise((resolve) => setTimeout(resolve, 400))
+    setGenerationStep("Compiling governance actions and corrective measures...")
+
+    await new Promise((resolve) => setTimeout(resolve, 300))
+
+    // Calculate comprehensive metrics
     const completedMilestones = milestonesState.filter((m) => m.status === "Complete").length
     const totalMilestones = milestonesState.length
+    const inProgressMilestones = milestonesState.filter((m) => m.status === "In Progress").length
     const openRisks = risksData.filter((r) => r.status === "Open" && r.type === "Risk").length
     const openIssues = risksData.filter((r) => r.status === "Open" && r.type === "Issue").length
+    const criticalRisks = risksData.filter((r) => r.severity === "Critical").length
     const delayedDecisions = decisionsState.filter((d) => d.latencyDays > 7).length
-
     const overallProgress = Math.round(milestonesState.reduce((acc, m) => acc + m.progress, 0) / totalMilestones)
+    const budgetUtilization = Math.round((projectData.spentToDate / projectData.totalBudget) * 100)
+    const completedGates = stageGatesData.filter((g) => g.status === "Complete").length
+    const totalGates = stageGatesData.length
+
+    // Calculate timeline variance
+    const delayedMilestones = milestonesState.filter((m) => m.variance > 0 && m.status === "Complete")
+    const totalVariance = delayedMilestones.reduce((acc, m) => acc + m.variance, 0)
+
+    // Determine overall status
     let overallStatus = "Green"
-    if (openIssues > 2 || overallProgress < 50) {
+    if (openIssues > 2 || criticalRisks > 0 || overallProgress < 50) {
       overallStatus = "Red"
-    } else if (openRisks > 3 || delayedDecisions > 2) {
+    } else if (openRisks > 3 || delayedDecisions > 2 || budgetUtilization > 85) {
       overallStatus = "Amber"
     }
 
@@ -2007,12 +1985,140 @@ export function SmartGovernance() {
       reportDate: new Date().toLocaleDateString("en-GB"),
       reportingPeriod: `Week ending ${new Date().toLocaleDateString("en-GB")}`,
       overallStatus: overallStatus,
-      keyDecisionDelays: `DECISION TIMELINE ANALYSIS:\n• ${delayedDecisions} decisions exceeded 7-day approval threshold\n• Average decision latency: ${Math.round(decisionsState.reduce((acc, d) => acc + d.latencyDays, 0) / decisionsState.length)} days\n• Critical decision bottlenecks identified in technical architecture and security approvals\n• Longest pending decision: ${Math.max(...decisionsState.map((d) => d.latencyDays))} days\n\nSPECIFIC DELAYS:\n• Cloud Provider Selection (22-09-2026): 7-day delay due to multi-stakeholder alignment\n• Security Framework Decision (12-10-2026): 4-day delay pending committee review\n• API Gateway Strategy (02-11-2026): 5-day delay for technical validation`,
-      scopeChanges: `SCOPE CHANGE TRACKING:\n• ${changeRequestData.status === "Approved" ? "1 approved" : "1 pending"} change request: ${changeRequestData.changeTitle}\n• Submission date: ${changeRequestData.submissionDate}\n• Budget impact: ${changeRequestData.budgetImpact.split("\n")[0]}\n• Schedule impact: ${changeRequestData.scheduleImpact.split("\n")[0]}\n\nCHANGE VELOCITY:\n• Change request submitted: ${changeRequestData.submissionDate}\n• Current status: ${changeRequestData.status}\n• Approval workflow: ${changeRequestData.approvers.filter((a) => a.status === "Approved").length}/${changeRequestData.approvers.filter((a) => a.required).length} required approvals completed`,
-      riskAlerts: `RISK ESCALATION TIMELINE:\n• ${openRisks} open risks currently monitored\n• ${risksData.filter((r) => r.severity === "Critical").length} critical severity risks requiring immediate attention\n• ${risksData.filter((r) => r.escalationLevel >= 3).length} risks escalated to Level 3 (executive attention)\n\nCRITICAL ALERTS:\n• Cloud Migration Data Loss (20-11-2026): Critical severity, Level 3 escalation since 15-08-2026\n• Cybersecurity Threat During Migration (15-11-2026): High severity, Level 3 escalation since 20-09-2026\n• Budget Overrun Alert (05-11-2026): High severity, Level 2 escalation since 28-09-2026\n\nMITIGATION STATUS:\n• ${risksData.filter((r) => r.status === "Mitigated").length} risks successfully mitigated\n• ${risksData.filter((r) => r.status === "In Progress").length} risks with active mitigation in progress`,
-      actionsTaken: `GOVERNANCE ACTIONS LOG:\n• Project Charter approved (28-08-2026): 4 days ahead of schedule\n• Technical Architecture Design completed (26-09-2026): 1 day delay, mitigation applied\n• Security Assessment finalized (02-10-2026): 2 days delay due to vendor dependencies\n• Change request workflow initiated (15-03-2026): Executive approval process triggered\n\nCORRECTIVE MEASURES:\n• Enhanced stakeholder engagement protocols implemented (05-10-2026)\n• Additional QA resources allocated to address resource shortage risk (08-10-2026)\n• GDPR compliance gap identified and remediation plan activated (07-10-2026)\n• Budget monitoring frequency increased to weekly reviews (10-10-2026)\n• Risk register updated with new cybersecurity controls (12-10-2026)`,
-      processBreakdowns: `PROCESS BREAKDOWN ANALYSIS:\n\n1. DECISION APPROVAL BOTTLENECK (September 2026):\n   • Breakdown: Cloud provider selection delayed 7 days\n   • Root cause: Inadequate stakeholder alignment before decision submission\n   • Impact: Technical team idle for 1 week, £15K productivity loss\n   • Date identified: 22-09-2026\n   • Resolution: Implemented pre-decision stakeholder briefing protocol\n\n2. RESOURCE ALLOCATION FAILURE (Early October 2026):\n   • Breakdown: QA team shortage not identified until testing phase\n   • Root cause: Insufficient resource planning during project initiation\n   • Impact: Risk of quality issues, potential 2-week timeline delay\n   • Date identified: 03-10-2026\n   • Resolution: External contractor engaged, automated testing accelerated\n\n3. COMPLIANCE GAP (07-10-2026):\n   • Breakdown: GDPR requirements not validated in design phase\n   • Root cause: Incomplete requirements gathering process\n   • Impact: Mandatory design rework, potential launch delay\n   • Date identified: 07-10-2026\n   • Resolution: Legal specialist engaged, compliance checkpoint added to all future phases\n\n4. BUDGET MONITORING LAPSE (Late September 2026):\n   • Breakdown: Infrastructure cost overrun not detected early\n   • Root cause: Monthly budget reviews insufficient for cloud spending\n   • Impact: £200K+ potential budget overrun\n   • Date identified: 28-09-2026\n   • Resolution: Implemented weekly cost monitoring and automated alerts`,
-      nextSteps: `IMMEDIATE ACTIONS (Next 2 weeks):\n• Accelerate pending change request approvals to prevent further delays\n• Address ${openIssues} open issues through escalation and resource allocation\n• Complete review of all Level 3 escalated risks with executive team\n\nPROCESS IMPROVEMENTS (Next 4 weeks):\n• Implement enhanced decision-making protocols to reduce approval latency\n• Strengthen requirements validation process to prevent compliance gaps\n• Establish weekly governance review cadence with all stakeholders\n• Deploy automated monitoring for budget, schedule, and risk thresholds`,
+      executiveSummary: `EXECUTIVE SUMMARY:\n• Overall Project Health: ${overallStatus} status\n• ${completedMilestones}/${totalMilestones} milestones completed (${overallProgress}% overall progress)\n• ${completedGates}/${totalGates} stage gates approved and passed\n• Budget: £${projectData.spentToDate.toLocaleString()} spent of £${projectData.totalBudget.toLocaleString()} (${budgetUtilization}% utilized)\n• ${openRisks} open risks (${criticalRisks} critical) and ${openIssues} open issues requiring attention\n• ${delayedDecisions} decisions exceeded standard approval timeframes\n\nKEY HIGHLIGHTS:\n• Project is ${overallProgress}% complete with ${inProgressMilestones} milestones currently in progress\n• ${changeRequestData.status === "Approved" ? "1 change request approved" : "1 change request pending approval"}\n• Stage Gate ${stageGatesData.findIndex((g) => g.status === "In Progress") + 1} currently in progress\n• ${totalVariance > 0 ? `Timeline variance: ${totalVariance} days accumulated delay` : "Project on schedule with no significant delays"}`,
+      milestoneProgress: `MILESTONE & GATE PROGRESSION:\n\nCOMPLETED MILESTONES (${completedMilestones}/${totalMilestones}):\n${milestonesState
+        .filter((m) => m.status === "Complete")
+        .map(
+          (m) =>
+            `• ${m.name} (${m.id}): Completed ${m.actualCompletionDate}${m.variance !== 0 ? ` - ${m.variance > 0 ? "+" : ""}${m.variance} days variance` : " - on time"}`,
+        )
+        .join("\n")}\n\nIN PROGRESS MILESTONES (${inProgressMilestones}):\n${milestonesState
+        .filter((m) => m.status === "In Progress")
+        .map(
+          (m) =>
+            `• ${m.name} (${m.id}): ${m.progress}% complete, due ${m.dueDate}\n  Owner: ${m.owner}, Priority: ${m.priority}`,
+        )
+        .join("\n")}\n\nSTAGE GATE STATUS:\n${stageGatesData
+        .map(
+          (gate) =>
+            `• ${gate.name}: ${gate.status} (${gate.progress}% complete)\n  Approval Status: ${gate.approvalStatus}${gate.gateReviewDate ? `, Reviewed: ${gate.gateReviewDate}` : ""}\n  Exit Criteria: ${gate.exitCriteria.filter((c) => c.status === "Complete").length}/${gate.exitCriteria.length} completed`,
+        )
+        .join("\n\n")}\n\nUPCOMING MILESTONES:\n${milestonesState
+        .filter((m) => m.status === "Not Started")
+        .slice(0, 5)
+        .map((m) => `• ${m.name}: Due ${m.dueDate}, Owner: ${m.owner}`)
+        .join("\n")}`,
+      financialStatus: `FINANCIAL PERFORMANCE:\n\nBUDGET OVERVIEW:\n• Total Budget: £${projectData.totalBudget.toLocaleString()}\n• Spent to Date: £${projectData.spentToDate.toLocaleString()} (${budgetUtilization}%)\n• Remaining Budget: £${(projectData.totalBudget - projectData.spentToDate).toLocaleString()}\n• Burn Rate: ${budgetUtilization > overallProgress ? "Above planned - spending faster than delivery" : "On track - spending aligned with progress"}\n\nBUDGET BY CATEGORY:\n${projectData.budgetBreakdown
+        .map(
+          (cat) =>
+            `• ${cat.category}: £${cat.spent.toLocaleString()} / £${cat.budgeted.toLocaleString()} (${Math.round((cat.spent / cat.budgeted) * 100)}%)\n  Remaining: £${cat.remaining.toLocaleString()}`,
+        )
+        .join(
+          "\n",
+        )}\n\nFINANCIAL RISKS & ADJUSTMENTS:\n• Contingency Reserve: £${projectData.contingencyReserve.toLocaleString()}\n• Management Reserve: £${projectData.managementReserve.toLocaleString()}\n${projectData.riskAdjustments
+        .map(
+          (risk) =>
+            `• ${risk.description}: £${risk.amount.toLocaleString()} (${Math.round(risk.probability * 100)}% probability)`,
+        )
+        .join(
+          "\n",
+        )}\n\nCHANGE REQUEST FINANCIAL IMPACT:\n${projectData.changeRequestImpacts.length > 0 ? projectData.changeRequestImpacts.map((cr) => `• ${cr.id}: ${cr.description} - £${cr.amount.toLocaleString()} (${cr.approved ? "Approved" : "Pending"})`).join("\n") : "• No approved change requests impacting budget"}`,
+      keyDecisionDelays: `DECISION TIMELINE ANALYSIS:\n• ${delayedDecisions} decisions exceeded 7-day approval threshold\n• Average decision latency: ${Math.round(decisionsState.reduce((acc, d) => acc + d.latencyDays, 0) / decisionsState.length)} days\n• Total decisions logged: ${decisionsState.length} (${decisionsState.filter((d) => d.status === "Implemented").length} implemented, ${decisionsState.filter((d) => d.status === "Approved").length} approved, ${decisionsState.filter((d) => d.status === "Under Review").length} under review)\n• Longest pending decision: ${Math.max(...decisionsState.map((d) => d.latencyDays))} days\n\nDECISION DELAYS BY CATEGORY:\n${Object.entries(
+        decisionsState.reduce(
+          (acc, d) => {
+            acc[d.category] = (acc[d.category] || 0) + (d.latencyDays > 7 ? 1 : 0)
+            return acc
+          },
+          {} as Record<string, number>,
+        ),
+      )
+        .filter(([_, count]) => count > 0)
+        .map(([category, count]) => `• ${category}: ${count} delayed decisions`)
+        .join("\n")}\n\nRECENT CRITICAL DECISIONS:\n${decisionsState
+        .filter((d) => d.priority === "Critical" || d.priority === "High")
+        .slice(0, 5)
+        .map(
+          (d) =>
+            `• ${d.title} (${d.decisionDate || "Pending"}): ${d.status}\n  Decision Maker: ${d.decisionMaker}, Latency: ${d.latencyDays} days`,
+        )
+        .join("\n\n")}`,
+      scopeChanges: `SCOPE CHANGE TRACKING:\n• ${changeRequestData.status === "Approved" ? "1 approved" : "1 pending"} change request: ${changeRequestData.changeTitle}\n• Request ID: ${changeRequestData.changeRequestId}\n• Submission date: ${changeRequestData.submissionDate}\n• Current status: ${changeRequestData.status}\n• Priority: ${changeRequestData.priority} | Urgency: ${changeRequestData.urgency}\n\nFINANCIAL IMPACT:\n${changeRequestData.budgetImpact.split("\n").slice(0, 3).join("\n")}\n\nSCHEDULE IMPACT:\n${changeRequestData.scheduleImpact.split("\n").slice(0, 3).join("\n")}\n\nRESOURCE IMPACT:\n${changeRequestData.resourceImpact.split("\n").slice(0, 2).join("\n")}\n\nAPPROVAL WORKFLOW STATUS:\n${changeRequestData.approvers
+        .filter((a) => a.required)
+        .map((a) => `• ${a.name} (${a.role}): ${a.status}${a.approvalDate ? ` - ${a.approvalDate}` : ""}`)
+        .join(
+          "\n",
+        )}\n• Approvals completed: ${changeRequestData.approvers.filter((a) => a.status === "Approved").length}/${changeRequestData.approvers.filter((a) => a.required).length} required approvers`,
+      riskAlerts: `RISK ESCALATION TIMELINE:\n• ${openRisks} open risks currently monitored\n• ${criticalRisks} critical severity risks requiring immediate attention\n• ${risksData.filter((r) => r.escalationLevel >= 3).length} risks escalated to Level 3 (executive attention)\n• ${risksData.filter((r) => r.escalationLevel >= 2).length} risks escalated to Level 2 or higher\n\nRISK BREAKDOWN BY SEVERITY:\n• Critical: ${risksData.filter((r) => r.severity === "Critical" && r.type === "Risk").length}\n• High: ${risksData.filter((r) => r.severity === "High" && r.type === "Risk").length}\n• Medium: ${risksData.filter((r) => r.severity === "Medium" && r.type === "Risk").length}\n• Low: ${risksData.filter((r) => r.severity === "Low" && r.type === "Risk").length}\n\nCRITICAL RISK ALERTS:\n${risksData
+        .filter((r) => r.severity === "Critical" && r.type === "Risk")
+        .map(
+          (r) =>
+            `• ${r.title} (${r.id}): ${r.severity} severity, Level ${r.escalationLevel} escalation\n  Project: ${r.project}, Owner: ${r.owner}\n  Date Identified: ${r.dateIdentified}, Due: ${r.dueDate}\n  Business Impact: ${r.businessImpact}`,
+        )
+        .join("\n\n")}\n\n HIGH SEVERITY RISKS:\n${risksData
+        .filter((r) => r.severity === "High" && r.type === "Risk" && r.status === "Open")
+        .slice(0, 3)
+        .map((r) => `• ${r.title} (${r.id}): ${r.project}, Owner: ${r.owner}, Due: ${r.dueDate}`)
+        .join("\n")}\n\nOPEN ISSUES (${openIssues}):\n${risksData
+        .filter((r) => r.type === "Issue" && r.status === "Open")
+        .map(
+          (i) => `• ${i.title} (${i.id}): ${i.severity} severity, ${i.project}\n  Owner: ${i.owner}, Due: ${i.dueDate}`,
+        )
+        .join(
+          "\n",
+        )}\n\nMITIGATION STATUS:\n• ${risksData.filter((r) => r.status === "Mitigated").length} risks successfully mitigated\n• ${risksData.filter((r) => r.status === "In Progress").length} risks with active mitigation in progress\n• ${risksData.filter((r) => r.status === "Closed").length} risks closed`,
+      actionsTaken: `GOVERNANCE ACTIONS LOG:\n\nCOMPLETED GOVERNANCE GATES:\n${stageGatesData
+        .filter((g) => g.status === "Complete")
+        .map(
+          (g) =>
+            `• ${g.name}: Approved ${g.gateReviewDate}\n  Authority: ${g.approvalAuthority}\n  Budget: £${g.budgetGate.approvedBudget.toLocaleString()} ${g.budgetGate.budgetStatus}`,
+        )
+        .join("\n\n")}\n\nRECENT MILESTONE COMPLETIONS:\n${milestonesState
+        .filter((m) => m.status === "Complete")
+        .slice(-5)
+        .map(
+          (m) =>
+            `• ${m.name} (${m.id}): Completed ${m.actualCompletionDate}${m.variance !== 0 ? ` (${m.variance > 0 ? "+" : ""}${m.variance} days variance)` : " (on time)"}\n  Owner: ${m.owner}, Priority: ${m.priority}`,
+        )
+        .join("\n")}\n\nIMPLEMENTED DECISIONS:\n${decisionsState
+        .filter((d) => d.status === "Implemented")
+        .slice(0, 5)
+        .map(
+          (d) =>
+            `• ${d.title}: Implemented on ${d.decisionDate}\n  Decision Maker: ${d.decisionMaker}, Category: ${d.category}`,
+        )
+        .join(
+          "\n",
+        )}\n\nCORRECTIVE MEASURES:\n• Enhanced stakeholder engagement protocols implemented (${stageGatesData.filter((g) => g.status === "Complete").length} gates completed with full stakeholder sign-off)\n• ${risksData.filter((r) => r.status === "Mitigated").length} risks successfully mitigated through proactive management\n• ${decisionsState.filter((d) => d.status === "Implemented").length} strategic decisions implemented on schedule\n• ${changeRequestData.status === "Approved" ? "Change request approved" : "Change request under review"} with comprehensive impact assessment`,
+      processBreakdowns: `PROCESS BREAKDOWN ANALYSIS:\n\n${delayedDecisions > 0 ? `1. DECISION APPROVAL BOTTLENECKS:\n   • ${delayedDecisions} decisions exceeded 7-day approval threshold\n   • Root cause: ${delayedDecisions > 5 ? "Systematic delays in approval workflows across multiple categories" : "Isolated delays in specific decision categories"}\n   • Impact: Potential project delays and resource idle time\n   • Resolution: ${delayedDecisions > 5 ? "Implement streamlined approval process with escalation protocols" : "Address specific bottlenecks in affected decision categories"}\n\n` : ""}${totalVariance > 10 ? `2. MILESTONE DELIVERY DELAYS:\n   • ${delayedMilestones.length} milestones completed late (${totalVariance} days total variance)\n   • Root cause: ${delayedMilestones.map((m) => m.name).join(", ")}\n   • Impact: Cumulative schedule pressure on downstream milestones\n   • Resolution: Resource reallocation and schedule optimization in progress\n\n` : ""}${
+        openIssues > 2
+          ? `3. ISSUE ESCALATION PATTERNS:\n   • ${openIssues} open issues requiring resolution\n   • Root cause: ${risksData
+              .filter((r) => r.type === "Issue" && r.status === "Open")
+              .map((i) => i.category)
+              .join(", ")} challenges\n   • Impact: ${risksData
+              .filter((r) => r.type === "Issue" && r.status === "Open")
+              .map((i) => i.businessImpact)
+              .join("; ")}\n   • Resolution: Corrective action plans in place for all open issues\n\n`
+          : ""
+      }${budgetUtilization > overallProgress + 10 ? `4. BUDGET BURN RATE VARIANCE:\n   • Spending ${budgetUtilization}% of budget vs ${overallProgress}% progress (${budgetUtilization - overallProgress}% variance)\n   • Root cause: Front-loaded spending or slower than planned delivery\n   • Impact: Potential budget pressure in later project phases\n   • Resolution: Implement enhanced budget monitoring and forecast adjustments\n\n` : ""}${
+        criticalRisks > 0
+          ? `5. CRITICAL RISK EXPOSURE:\n   • ${criticalRisks} critical risks requiring immediate executive attention\n   • Risks: ${risksData
+              .filter((r) => r.severity === "Critical")
+              .map((r) => r.title)
+              .join("; ")}\n   • Impact: ${risksData
+              .filter((r) => r.severity === "Critical")
+              .map((r) => r.businessImpact)
+              .join("; ")}\n   • Resolution: Executive risk review scheduled, enhanced mitigation plans activated`
+          : "POSITIVE GOVERNANCE:\n• No critical process breakdowns identified\n• Decision approval processes operating within acceptable timeframes\n• Milestone delivery aligned with schedule expectations\n• Budget utilization tracking delivery progress\n• Risk management processes effectively containing exposure"
+      }`,
+      nextSteps: `IMMEDIATE ACTIONS (Next 2 weeks):\n${delayedDecisions > 0 ? `• Accelerate ${delayedDecisions} pending decision approvals to prevent further delays\n` : ""}${openIssues > 0 ? `• Address ${openIssues} open issues through escalation and resource allocation\n` : ""}${criticalRisks > 0 ? `• Complete executive review of ${criticalRisks} critical risks with Level 3 escalation\n` : ""}${changeRequestData.status !== "Approved" ? `• Complete approval workflow for pending change request (${changeRequestData.approvers.filter((a) => a.status === "Approved").length}/${changeRequestData.approvers.filter((a) => a.required).length} approvals)\n` : ""}${inProgressMilestones > 0 ? `• Monitor ${inProgressMilestones} in-progress milestones to ensure on-time delivery\n` : ""}• Prepare for ${stageGatesData.find((g) => g.status === "In Progress") ? stageGatesData.find((g) => g.status === "In Progress")!.name : "next stage gate"} review\n\nMEDIUM-TERM ACTIONS (Next 4 weeks):\n${delayedDecisions > 2 ? "• Implement enhanced decision-making protocols to reduce approval latency\n" : ""}${budgetUtilization > overallProgress + 10 ? "• Review budget burn rate and adjust spending forecast\n" : ""}• Establish weekly governance review cadence with all stakeholders\n• Deploy automated monitoring for budget, schedule, and risk thresholds\n${
+        milestonesState.filter((m) => m.status === "Not Started").length > 0
+          ? `• Plan resource allocation for ${milestonesState
+              .filter((m) => m.status === "Not Started")
+              .slice(0, 3)
+              .map((m) => m.name)
+              .join(", ")}\n`
+          : ""
+      }• Conduct comprehensive risk assessment and update mitigation strategies\n\nSTRATEGIC PRIORITIES:\n• Maintain focus on ${stageGatesData.find((g) => g.status === "In Progress")?.phase || "current phase"} deliverables and gate criteria\n• Ensure financial controls remain effective as project progresses\n• Strengthen stakeholder communication and engagement protocols\n• Build contingency plans for identified high-impact risks`,
     }
 
     setStatusData(newStatusData)
@@ -2098,21 +2204,7 @@ export function SmartGovernance() {
 
   // Reset demo data function
   const resetDemoData = () => {
-    setStatusData({
-      ...statusReportTemplate,
-      keyDecisionDelays:
-        "• Governance report ready for auto-generation\n• Decision delay analysis will identify approval bottlenecks with specific dates\n• All decision repository data connected and ready for timeline analysis",
-      scopeChanges:
-        "• Scope change analysis pending - comprehensive review of change requests\n• Change request impacts will be assessed with detailed timelines\n• Integration with financials and milestones ready",
-      riskAlerts:
-        "• Risk escalation timeline will be generated from complete risk register\n• Critical risk emergence patterns to be identified\n• Mitigation effectiveness tracking across all project phases",
-      actionsTaken:
-        "• Governance actions log will compile all corrective measures taken\n• Response time analysis for all issues and risks\n• Effectiveness assessment of interventions with dates",
-      processBreakdowns:
-        "• Process breakdown analysis will identify where governance failed\n• Root cause analysis with specific dates and impacts\n• Recommendations for process improvements based on actual incidents",
-      nextSteps:
-        "• Click 'Generate Status Report' to compile governance timeline\n• Review process breakdowns and corrective actions\n• Validate integrated reporting across all governance dimensions",
-    })
+    setStatusData(statusReportTemplate)
     setLastGenerated("Pending generation")
     setDemoMode(true)
   }
@@ -2166,7 +2258,7 @@ export function SmartGovernance() {
             value="milestones"
             className="bg-gradient-to-r from-purple-700 to-purple-800 data-[state=active]:from-purple-800 data-[state=active]:to-purple-900 text-white data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:border data-[state=active]:border-white/20 text-xs"
           >
-            Governance Milestones
+            Governance Gates
           </TabsTrigger>
           <TabsTrigger
             value="financials"
@@ -2196,7 +2288,7 @@ export function SmartGovernance() {
             value="status"
             className="bg-gradient-to-r from-violet-900 to-violet-950 data-[state=active]:from-violet-950 data-[state=active]:to-indigo-900 text-white data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:border data-[state=active]:border-white/20 text-xs"
           >
-            Governance Report
+            Status Report
           </TabsTrigger>
         </TabsList>
 
